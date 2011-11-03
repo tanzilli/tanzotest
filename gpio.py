@@ -15,10 +15,10 @@ test = {
 		[2,3],
 		[4,5]
 	],
-	"J6" : [
-		[6,7],
-		[8,9]
-	],
+#	"J6" : [
+#		[6,7],
+#		[8,9]
+#	],
 }
 
 for connector_index, connector_item in enumerate(test):
