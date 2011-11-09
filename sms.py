@@ -5,7 +5,7 @@ send_to = "+393460624394"
 message = "Test da FOXGM2"
 
 ser = serial.Serial(
-	port='/dev/ttyS2', 
+	port='/dev/ttyS1', 
 	baudrate=115200, 
 	timeout=1,
 	parity=serial.PARITY_NONE,
