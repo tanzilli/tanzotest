@@ -3,7 +3,7 @@
 import serial
 import time
 
-send_to = "+393460624394"
+send_to = "+393460624304"
 message = "Test da FOXGM2"
 
 ser = serial.Serial(
