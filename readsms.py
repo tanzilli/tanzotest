@@ -25,7 +25,7 @@ print ser.readlines()
 
 ser.write("AT+CNMI=1,2,0,0,0\r")
 
-	while 1:
-		print ser.readlines()
+while True:
+	print ser.readlines()
 
 ser.close()
