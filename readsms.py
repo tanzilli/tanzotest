@@ -23,10 +23,9 @@ print ser.readlines()
 ser.write("AT+CMGF=1\r")
 print ser.readlines()
 
-ser.write("AT+CMGS=" + "\"" + send_to + "\"" + "\r")
-time.sleep(0.5);
-ser.write(message + "\x1a")
-time.sleep(1);
-print ser.readlines()
+ser.write("AT+CNMI=1,2,0,0,0\r")
+
+	while True:
+		print ser.readlines()
 
 ser.close()
