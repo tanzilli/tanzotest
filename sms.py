@@ -1,8 +1,8 @@
 import serial
 import time
 
-send_to = "+3940916"
-message = "mytest"
+send_to = "+393460624394"
+message = "Test da FOXGM2"
 
 ser = serial.Serial(
 	port='/dev/ttyS2', 
