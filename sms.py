@@ -3,8 +3,8 @@
 import serial
 import time
 
-send_to = "+393460624304"
-message = "Test da FOXGM2"
+send_to = "+3940916"
+message = "Test"
 
 ser = serial.Serial(
 	port='/dev/ttyS1', 
@@ -21,6 +21,9 @@ ser.write("ATH\r")
 print ser.readlines()
  
 ser.write("AT+CMGF=1\r")
+print ser.readlines()
+
+ser.write("AT+CMGL=0\r")
 print ser.readlines()
 
 ser.write("AT+CMGS=" + "\"" + send_to + "\"" + "\r")
