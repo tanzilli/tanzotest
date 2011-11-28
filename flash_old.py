@@ -31,118 +31,8 @@ import sys
 import getopt
 import string 
 from xmodem import XMODEM
-import serial
-import time
-import sys
-import getopt
-import string 
-import datetime
 
-color_warning = "\x1B[30;41m" 
-color_pass = "\x1B[30;42m" 
-color_normal = "\x1B[0m" 
-
-elenco_test = {
-	"AcmeBoot":"-",
-	"microSD":"-",
-	"sda1":"-",
-	"sdb1":"-",
-	"eth0":"-",
-	"login":"-",
-	"password":"-",
-	"gpio":"-",
-}
-
-############################################
-def test ():
-	token=""
-	while True:
-		s = ser.read(1) 
-		sys.stdout.write(s)
-		sys.stdout.flush()
-		token += s
-
-		pos = token.find("AcmeBoot")
-		if pos >= 0:
-			token=""
-			elenco_test["AcmeBoot"]="OK"
-			continue
- 
-		pos = token.find("Jump to Kernel")
-		if pos >= 0:
-			token=""
-			elenco_test["microSD"]="OK"
-			continue
-
-		pos = token.find("sda1")
-		if pos >= 0:
-			token=""
-			elenco_test["sda1"]="OK"
-			continue
-
-		pos = token.find("sdb1")
-		if pos >= 0:
-			token=""
-			elenco_test["sdb1"]="OK"
-			continue
-
-		pos = token.find("debarm login:")
-		if pos >= 0:
-			token=""
-			elenco_test["login"]="OK"
-			ser.write("root\r")
-			continue
-
-		pos = token.find("Password:")
-		if pos >= 0:
-			token=""
-			elenco_test["password"]="OK"
-			ser.write("netusg20\r")
-			time.sleep(0.5)
-			ser.write("./microsd_test.py\r")
-			continue
-
-
-		pos = token.find("[[TEST J6 J7 OK]]")
-		if pos >= 0:
-			token=""
-			dataoracorrente=datetime.datetime.now().strftime("%m%d%H%M%Y")
-			comando =  "date " + dataoracorrente + "\r"
-			ser.write(comando)
-
-			elenco_test["gpio"]="OK"
-			continue
-
-		pos = token.find("`index.html' saved")
-		if pos >= 0:
-			token=""
-
-			ser.write("reboot\r")
-
-			elenco_test["eth0"]="OK"
-			continue
-
-		pos = token.find("reboot NOW")
-		if pos >= 0:
-			token=""
-			break
-
-	print "\n"
-	print color_pass + " Risultato finale dei test" + color_normal
-	print "\n"
-
-	for test in elenco_test:
-		print test + " -> ",
-	
-		if elenco_test[test]=="OK":
-			print elenco_test[test]
-		else:
-			print color_warning + "error" + color_normal
-
-############################################
-
-#filename = "acmeboot_serialflash_1.20.bin"
-filename = "acmeboot_dataflash_1.20.bin"
+filename = "acme_boot_1.20.bin"
 serialdevice = "/dev/ttyUSB0"
 
 print "Programmazione memoria flash su FOX Board G20"
@@ -214,10 +104,6 @@ while True:
 	time.sleep(1)
 	if ser.read(1)=='>':
 	    break
-###############
-#	if ser.read(1)!= 'R':
-#		test()
-###############
 
 ser.flushInput()
 
