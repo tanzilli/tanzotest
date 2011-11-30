@@ -85,9 +85,7 @@ for connector_index, connector_item in enumerate(test):
 					print "gpio error %s.%s = high ->  %s.%s" % (connector_item,test_item[1],connector_item,test_item[0])
 					error_counter = error_counter + 1
 
-				if error_counter==0:
-					break
-				else:
+				if error_counter>0:
 					print "Sistema le strip..."
 					time.sleep(1)
 
