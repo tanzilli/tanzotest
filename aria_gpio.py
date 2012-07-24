@@ -93,7 +93,6 @@ for connector_index, connector_item in enumerate(test):
 				if error_counter==0:
 					break
 				else:
-					print "Sistema le strip..."
 					time.sleep(1)
 
 print "GPIO test OK"
