@@ -145,26 +145,26 @@ while True:
 
 print "ETH test OK"
 
-while True:
-	if os.system("mount -t vfat /dev/sda1 /mnt/usbkey1")==0:
-		break
-	print "Errore USB"
+os.system("umount /dev/sda1");
+os.system("umount /dev/sdb1");
+os.system("umount /dev/sdc1");
 
-print "USB test OK"
+if os.system("mount -t vfat /dev/sda1 /mnt/usbkey1")==0:
+	print "1) USB test OK"
+else:
+	print "1) Errore USB"
 
-while True:
-	if os.system("mount -t vfat /dev/sdb1 /mnt/usbkey2")==0:
-		break
-	print "Errore USB"
 
-print "USB test OK"
+if os.system("mount -t vfat /dev/sdb1 /mnt/usbkey2")==0:
+	print "2) USB test OK"
+else:
+	print "2) Errore USB"
 
-while True:
-	if os.system("mount -t vfat /dev/sdb1 /mnt/usbkey3")==0:
-		break
-	print "Errore USB"
 
-print "USB test OK"
+if os.system("mount -t vfat /dev/sdc1 /mnt/usbkey3")==0:
+	print "3) USB test OK"
+else:
+	print "3) Errore USB"
 
 LEDR = acmeboards.Pin('N','23','low')
 LEDG = acmeboards.Pin('N','22','high')
