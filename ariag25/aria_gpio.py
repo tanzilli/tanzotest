@@ -138,12 +138,11 @@ print "GPIO test OK"
 
 os.system("rm index.html");
 
-while True:
-	if os.system("wget http://192.168.1.1")==0:
-		break
+if os.system("wget http://192.168.1.1")==0:
+	print "ETH test OK"
+else:
 	print "Errore di rete"
 
-print "ETH test OK"
 
 os.system("umount /dev/sda1");
 os.system("umount /dev/sdb1");
