@@ -135,11 +135,40 @@ while True:
 		time.sleep(1)
 
 print "GPIO test OK"
+
+os.system("rm index.html");
+
+while True:
+	if os.system("wget http://192.168.1.1")==0:
+		break
+	print "Errore di rete"
+
+print "ETH test OK"
+
+while True:
+	if os.system("mount -t vfat /dev/sda1 /mnt/usbkey1")==0:
+		break
+	print "Errore USB"
+
+print "USB test OK"
+
+while True:
+	if os.system("mount -t vfat /dev/sda2 /mnt/usbkey2")==0:
+		break
+	print "Errore USB"
+
+print "USB test OK"
+
+while True:
+	if os.system("mount -t vfat /dev/sda3 /mnt/usbkey3")==0:
+		break
+	print "Errore USB"
+
+print "USB test OK"
+
 LEDR = acmeboards.Pin('N','23','low')
 LEDG = acmeboards.Pin('N','22','high')
 #os.system("halt");
-#os.system("rm index.html");
-#os.system("wget http://10.55.99.2");
 
 
 
