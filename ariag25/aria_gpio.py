@@ -153,14 +153,14 @@ while True:
 print "USB test OK"
 
 while True:
-	if os.system("mount -t vfat /dev/sda2 /mnt/usbkey2")==0:
+	if os.system("mount -t vfat /dev/sdb1 /mnt/usbkey2")==0:
 		break
 	print "Errore USB"
 
 print "USB test OK"
 
 while True:
-	if os.system("mount -t vfat /dev/sda3 /mnt/usbkey3")==0:
+	if os.system("mount -t vfat /dev/sdb1 /mnt/usbkey3")==0:
 		break
 	print "Errore USB"
 
