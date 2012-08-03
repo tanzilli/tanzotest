@@ -6,7 +6,7 @@
 # 	Sergio Tanzilli - tanzilli@acmesystems.it
 
 import time
-import acmeboards
+import ablib
 import serial
 import sys
 import os
@@ -17,20 +17,20 @@ import os
 # Test GPIO
 
 print "Test LEDs"
-LEDR = acmeboards.Pin('N','23','low')
-LEDG = acmeboards.Pin('N','22','high')
+LEDR = ablib.Pin('N','23','low')
+LEDG = ablib.Pin('N','22','high')
 time.sleep(0.3)
-LEDR = acmeboards.Pin('N','23','high')
-LEDG = acmeboards.Pin('N','22','low')
+LEDR = ablib.Pin('N','23','high')
+LEDG = ablib.Pin('N','22','low')
 time.sleep(0.3)
-LEDR = acmeboards.Pin('N','23','low')
-LEDG = acmeboards.Pin('N','22','high')
+LEDR = ablib.Pin('N','23','low')
+LEDG = ablib.Pin('N','22','high')
 time.sleep(0.3)
-LEDR = acmeboards.Pin('N','23','high')
-LEDG = acmeboards.Pin('N','22','low')
+LEDR = ablib.Pin('N','23','high')
+LEDG = ablib.Pin('N','22','low')
 time.sleep(0.3)
-LEDR = acmeboards.Pin('N','23','low')
-LEDG = acmeboards.Pin('N','22','low')
+LEDR = ablib.Pin('N','23','low')
+LEDG = ablib.Pin('N','22','low')
 
 
 print "Test GPIO"
@@ -88,8 +88,8 @@ while True:
 			#TEST A pin su anodo alto
 			#  Il pin sul catodo deve valere 1
 
-			pin_out = acmeboards.Pin(connector_item,test_item[0],'high')
-			pin_in = acmeboards.Pin(connector_item,test_item[1],'in')
+			pin_out = ablib.Pin(connector_item,test_item[0],'high')
+			pin_in = ablib.Pin(connector_item,test_item[1],'in')
 
 			if pin_in.get_value()<>1:
 				print "TEST A: Pin %s.%s o %s.%s in corto verso massa" % (connector_item,test_item[0],connector_item,test_item[1])
@@ -98,8 +98,8 @@ while True:
 			#TEST B pin su anodo basso
 			#  Il pin sul catodo deve valere 1
 
-			pin_out = acmeboards.Pin(connector_item,test_item[0],'low')
-			pin_in = acmeboards.Pin(connector_item,test_item[1],'in')
+			pin_out = ablib.Pin(connector_item,test_item[0],'low')
+			pin_in = ablib.Pin(connector_item,test_item[1],'in')
 
 			if pin_in.get_value()<>1:
 				print "TEST B: Pin %s.%s e %s.%s in corto" % (connector_item,test_item[0],connector_item,test_item[1])
@@ -108,8 +108,8 @@ while True:
 			#TEST C pin su catodo basso
 			#  Il pin sul anodo deve valere 0
 
-			pin_in = acmeboards.Pin(connector_item,test_item[0],'in')
-			pin_out = acmeboards.Pin(connector_item,test_item[1],'low')
+			pin_in = ablib.Pin(connector_item,test_item[0],'in')
+			pin_out = ablib.Pin(connector_item,test_item[1],'low')
 			
 			if pin_in.get_value()<>0:
 				print "TEST C: Pin %s.%s o %s.%s staccati" % (connector_item,test_item[0],connector_item,test_item[1])
@@ -118,20 +118,20 @@ while True:
 			#TEST D pin su catodo alto
 			#  Il pin sul anodo deve valere 1
 
-			pin_in = acmeboards.Pin(connector_item,test_item[0],'in')
-			pin_out = acmeboards.Pin(connector_item,test_item[1],'high')
+			pin_in = ablib.Pin(connector_item,test_item[0],'in')
+			pin_out = ablib.Pin(connector_item,test_item[1],'high')
 
 			if pin_in.get_value()<>1:
 				print "TEST D: Pin %s.%s o %s.%s in corto verso massa" % (connector_item,test_item[0],connector_item,test_item[1])
 				error_counter = error_counter + 1
 			# ripristina il pin di uscita in ingresso
-			pin_out = acmeboards.Pin(connector_item,test_item[1],'in')
+			pin_out = ablib.Pin(connector_item,test_item[1],'in')
 
 	if error_counter==0:
 		break
 	else:
-		LEDR = acmeboards.Pin('N','23','high')
-		LEDG = acmeboards.Pin('N','22','low')
+		LEDR = ablib.Pin('N','23','high')
+		LEDG = ablib.Pin('N','22','low')
 		time.sleep(1)
 
 print "GPIO test OK"
@@ -165,8 +165,8 @@ if os.system("mount -t vfat /dev/sdc1 /mnt/usbkey3")==0:
 else:
 	print "3) Errore USB"
 
-LEDR = acmeboards.Pin('N','23','low')
-LEDG = acmeboards.Pin('N','22','high')
+LEDR = ablib.Pin('N','23','low')
+LEDG = ablib.Pin('N','22','high')
 #os.system("halt");
 
 
