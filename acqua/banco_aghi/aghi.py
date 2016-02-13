@@ -132,14 +132,14 @@ for test in testlist:
 	acmepins.setup(test[1],acmepins.IN,0)
 
 	acmepins.output(test[0],1)
-	print "%s=1 --> %s==1 ?" % (test[0],test[1])
 	if acmepins.input(test[1])==0:
+		print "%s=1 --> %s==1 ?" % (test[0],test[1]),
 		print "Errore ! %s in corto verso massa" % (test[1])
 		error_counter = error_counter + 1
 
-	print "%s=0 --> %s==1 ? " % (test[0],test[1])
 	acmepins.output(test[0],0)
 	if acmepins.input(test[1])==0:
+		print "%s=0 --> %s==1 ? " % (test[0],test[1]),
 		print "Errore ! Corto tra %s e %s" % (test[0],test[1])
 		error_counter = error_counter + 1
 
@@ -147,14 +147,14 @@ for test in testlist:
 	acmepins.setup(test[1],acmepins.OUT,0)
 
 	acmepins.output(test[1],1)
-	print "%s==1 ? <-- %s=1" % (test[0],test[1])
 	if acmepins.input(test[0])==0:
+		print "%s==1 ? <-- %s=1" % (test[0],test[1]),
 		print "Error ! %s in corto verso massa" % (test[0])
 		error_counter = error_counter + 1
 
-	print "%s==0 ? <-- %s=0 " % (test[0],test[1])
 	acmepins.output(test[1],0)
 	if acmepins.input(test[0])==1:
+		print "%s==0 ? <-- %s=0 " % (test[0],test[1]),
 		print "Errore ! %s o %s a circuito aperto oppure %s a 3.3v" % (test[0],test[1],test[0])
 		error_counter = error_counter + 1
 
