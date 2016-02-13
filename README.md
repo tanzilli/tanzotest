@@ -1,13 +1,17 @@
-#Programmi di test veloci per schede Acme
+#Programmi di test 
 
-##FOX Board G20
+##Acqua A5
 
-Directory: /foxg20
-* **test.py** Programma da lanciare su PC con DPI su FOX
-* **gpio.py** Programma lanciato su FOXG20 per testare i pin su J6 e J7 
+* [Banco test ad aghi](https://github.com/tanzilli/tanzotest/tree/master/acqua/banco_aghi)
+* [Banco test a led](https://github.com/tanzilli/tanzotest/tree/master/acqua/banco_led)
 
 ##Aria G25
 
-Directory: /ariag25
-* **aria_gpio.py** Programma autonomo lanciato su Aria G25 per testare i pin N,E,S,W 
+* [Banco test ad aghi](https://github.com/tanzilli/tanzotest/tree/master/aria/test_banco_aghi)
+
+##FOX Board G20
+
+* [Banco test a pin](https://github.com/tanzilli/tanzotest/tree/master/foxg20)
+
+
 
