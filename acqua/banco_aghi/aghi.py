@@ -19,39 +19,6 @@ color_check = "\x1B[31m"
 
 numerrors = 0
 
-#***********************************************************************
-# Test RAM
-#***********************************************************************
-'''
-print "DDR2 RAM Test"
-if os.system("memtester 50K 1")==0:
-	print color_pass + "Memory OK" + color_normal
-else:
-	print color_warning + "Memory ERROR !" + color_normal
-	numerrors = numerrors + 1
-'''
-
-#***********************************************************************
-# Test Ethernet
-#***********************************************************************
-
-'''
-os.system("rm index.html");
-if os.system("wget http://192.168.1.1")==0:
-	print color_pass + "ETH test OK" + color_normal
-	error_eth = 0
-else:
-	print color_warning + "ERRORE DI RETE" + color_normal
-	numerrors = numerrors+1
-	error_eth = 1
-'''
-
-#***********************************************************************
-# Test GPIO
-#***********************************************************************
-
-print "Test GPIO"
-
 testlist = [ 
 	["PA0","PA1"],
 	["PA2","PA3"],
@@ -117,6 +84,45 @@ testlist = [
 	["PC21","PC20"],
 ]
 
+
+#***********************************************************************
+# Test RAM
+#***********************************************************************
+
+print "Test RAM"
+
+'''
+print "DDR2 RAM Test"
+if os.system("memtester 50K 1")==0:
+	print color_pass + "Memory OK" + color_normal
+else:
+	print color_warning + "Memory ERROR !" + color_normal
+	numerrors = numerrors + 1
+'''
+
+#***********************************************************************
+# Test Ethernet
+#***********************************************************************
+
+print "Test Ethernet"
+
+'''
+os.system("rm index.html");
+if os.system("wget http://192.168.1.1")==0:
+	print color_pass + "ETH test OK" + color_normal
+	error_eth = 0
+else:
+	print color_warning + "ERRORE DI RETE" + color_normal
+	numerrors = numerrors+1
+	error_eth = 1
+'''
+
+#***********************************************************************
+# Test GPIO
+#***********************************************************************
+
+print "Test GPIO"
+
 # Ciclo di scansione e test dei GPIO
 
 error_counter=0
@@ -128,13 +134,13 @@ for test in testlist:
 	acmepins.output(test[0],1)
 	print "%s=1 --> %s==1 ?" % (test[0],test[1])
 	if acmepins.input(test[1])==0:
-		print "Error !"
+		print "Errore ! %s in corto verso massa" % (test[1])
 		error_counter = error_counter + 1
 
 	print "%s=0 --> %s==1 ? " % (test[0],test[1])
 	acmepins.output(test[0],0)
 	if acmepins.input(test[1])==0:
-		print "Error !"
+		print "Errore ! Corto tra %s e %s" % (test[0],test[1])
 		error_counter = error_counter + 1
 
 	acmepins.setup(test[0],acmepins.IN,0)
@@ -143,13 +149,13 @@ for test in testlist:
 	acmepins.output(test[1],1)
 	print "%s==1 ? <-- %s=1" % (test[0],test[1])
 	if acmepins.input(test[0])==0:
-		print "Error !"
+		print "Error ! %s in corto verso massa" % (test[0])
 		error_counter = error_counter + 1
 
-	print "%s==0 ? --> %s=0 " % (test[0],test[1])
+	print "%s==0 ? <-- %s=0 " % (test[0],test[1])
 	acmepins.output(test[1],0)
 	if acmepins.input(test[0])==1:
-		print "Error !"
+		print "Errore ! %s o %s a circuito aperto oppure %s a 3.3v" % (test[0],test[1],test[0])
 		error_counter = error_counter + 1
 
 if error_counter==0:
@@ -162,6 +168,8 @@ else:
 #***********************************************************************
 # Test USB
 #***********************************************************************
+
+print "Test USB"
 
 '''
 os.system("umount /dev/sda1");
