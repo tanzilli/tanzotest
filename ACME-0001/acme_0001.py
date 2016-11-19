@@ -26,18 +26,18 @@ sim_select  = GPIO('PA4','LOW')
 def menu():
 	print "Test ACME-0001 FoxBox mini"
 	print "--------------------------"
-	print "a) Led ON"
-	print "b) Led ON"
-	print "c) Modem ON"
-	print "d) Modem OFF"
-	print "e) SIM 1"
-	print "f) SIM 2"
-	print "z) Open modems serial port"
-	print "v) Send AT\n"
-	print "x) Close modems serial port"
+	print "q) Leds ON"
+	print "w) Leds OFF"
+	print "a) Modem ON"
+	print "s) Modem OFF"
+	print "z) SIM 1"
+	print "x) SIM 2"
+	print "1) Open modems serial port"
+	print "2) Send AT"
+	print "p) ping www.acmesystems.it"
 	print "--------------------------"
 	print "h) Help"
-	print "q) Exit"
+	print "ESC) Exit"
 
 def isData():
 	return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
@@ -82,46 +82,42 @@ try:
 
 		if isData():
 			c = sys.stdin.read(1)
-			if c == '\x1b':         # x1b is ESC
-				print "\n"
-				print color_pass + " Risultato finale dei test" + color_normal
-				print "\n"
-				ser.close()
-				break
 				
-			if c == "a":
+			if c == "q":
+				print "Leds ON"
 				led_verde.on()
 				led_sim1.on()
 				led_sim2.on()
 				continue
 
-			if c == "b":
+			if c == "w":
+				print "Leds OFF"
 				led_verde.off()
 				led_sim1.off()
 				led_sim2.off()
 				continue
 
-			if c == "c":
+			if c == "a":
 				print "Modem ON"
 				modem_power.on()
 				continue
 
-			if c == "d":
+			if c == "s":
 				print "Modem OFF"
 				modem_power.off()
 				continue
 				
-			if c == "e":
+			if c == "z":
 				print "SIM 1"
 				sim_select.off()
 				continue
 
-			if c == "f":
+			if c == "x":
 				print "SIM 2"
 				sim_select.on()
 				continue
 
-			if c == "z":
+			if c == "1":
 				print "Open modem serial port"
 				modem_serial_id = serial.Serial(
 					port="/dev/ttyUSB0", 
@@ -134,33 +130,23 @@ try:
 				modem_opened=True
 				continue
 
-			if c == "v":
+			if c == "2":
 				print "Send AT\r"
 				modem_serial_id.write("AT\r")
 
-			if c == "x":
+			if c == '\x1b':         # x1b is ESC
 				print "Close modem serial port"
 				modem_opened=False
 				modem_serial_port.close()
+				termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
+				quit()
   
-#ser.flushInput()
-
-
-			if c == "r":
-				print "SIM 2"
-				sim_select.on()
-				continue
-
-			if c == "2":
+			if c == "p":
 				ser.write("ping -c 4 www.acmesystems.it\r");
 				continue
 
 			if c == "h":
 				menu()
-
-			if c == "q":
-				termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
-				quit()
 
 finally:
 	termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
