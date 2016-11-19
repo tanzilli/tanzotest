@@ -34,6 +34,7 @@ def menu():
 	print "x) SIM 2"
 	print "1) Open modems serial port"
 	print "2) Send AT"
+	print "3) Send SMS"
 	print "p) ping www.acmesystems.it"
 	print "--------------------------"
 	print "h) Help"
@@ -133,6 +134,15 @@ try:
 			if c == "2":
 				print "Send AT\r"
 				modem_serial_id.write("AT\r")
+
+			if c == "3":
+				print "Send SMS\r"
+				modem_serial_id.write("AT+CMGF=1\r")
+				modem_serial_id.write("AT+CMGS=" + "\"" + "+393460624344" + "\"" + "\r")
+				time.sleep(0.5);
+				modem_serial_id.write("SMS da FOXBOX mini" + "\x1a")
+				
+
 
 			if c == '\x1b':         # x1b is ESC
 				print "Close modem serial port"
