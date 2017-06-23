@@ -93,7 +93,7 @@ for connector_index, connector_item in enumerate(test):
 
 print "GPIO test OK"
 os.system("rm index.html");
-os.system("wget http://10.55.99.2");
+os.system("wget http://192.168.2.1");
 
 
 
