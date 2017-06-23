@@ -77,7 +77,7 @@ while True:
 		elenco_test["sdb1"]="OK"
 		continue
 
-	pos = token.find("debarm login:")
+	pos = token.find("netusg20 login:")
 	if pos >= 0:
 		token=""
 		elenco_test["login"]="OK"
