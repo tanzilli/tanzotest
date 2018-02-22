@@ -1,0 +1,467 @@
+/*
+ * acme-acqua-gpio.dts
+ * Device Tree file for Acqua A5
+ * All gpio
+ *
+ */
+ 
+/dts-v1/;
+#include "sama5d31.dtsi"
+
+/ {
+	model = "Acme Systems Acqua A5";
+	compatible = "atmel,acme-acqua","atmel,sama5d31", "atmel,sama5d3", "atmel,sama5";
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+		bootargs = "mem=256M console=ttyS0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 rw rootwait consoleblank=0";
+	};
+
+	memory {
+		reg = <0x20000000 0x10000000>;
+	};
+
+	clocks {
+		slow_xtal {
+			clock-frequency = <32768>;
+		};
+
+		main_xtal {
+			clock-frequency = <12000000>;
+		};
+	};
+
+	ahb {
+		apb {
+		
+			/* LCD */
+			
+			hlcdc: hlcdc@f0030000 {
+				status = "disabled";
+				hlcdc-display-controller {
+					pinctrl-names = "default";
+					pinctrl-0 = <&pinctrl_lcd_base &pinctrl_lcd_rgb888_alt>;
+					port@0 {
+						hlcdc_panel_output: endpoint@0 {
+							remote-endpoint = <&panel_input>;
+						};
+					};
+				};
+			};
+
+			/* MicroSD */
+
+			mmc0: mmc@f0000000 {
+				pinctrl-0 = <&pinctrl_mmc0_clk_cmd_dat0 &pinctrl_mmc0_dat1_3 &pinctrl_mmc0_dat4_7 &pinctrl_mmc0_cd>;
+				status = "okay";
+				slot@0 {
+					reg = <0>;
+					bus-width = <8>;
+					cd-gpios = <&pioE 0 GPIO_ACTIVE_LOW>;
+				};
+			};
+
+			/* SPI */
+
+			spi0: spi@f0004000 {
+				status = "disabled";
+				/*cs-gpios = <&pioD 13 0>, <&pioD 14 0>, <&pioD 15>, <&pioD 16>;*/
+				cs-gpios = <&pioD 13 0>, <&pioD 14 0>, <&pioD 15>, <0>;
+
+				device@0 {
+					compatible = "spidev";
+					spi-max-frequency = <50000000>;     // 50 MHz
+					reg = <0>;
+				};
+				device@1 {
+					compatible = "spidev";
+					spi-max-frequency = <5000000>;      // 5 MHz
+					reg = <1>;
+				};
+				device@2 {
+					compatible = "spidev";
+					spi-max-frequency = <5000000>;      // 5 MHz
+					reg = <2>;
+				};
+				/*device@3 {
+					compatible = "spidev";
+					spi-max-frequency = <5000000>;      // 5 MHz
+					reg = <3>;
+				};*/
+			};
+
+			spi1: spi@f8008000 {
+				status = "disabled";
+				cs-gpios = <&pioC 25 0>, <&pioC 26 0>, <&pioC 27 0>, <&pioC 28 0>;
+				
+				device@0 {
+					compatible = "spidev";
+					spi-max-frequency = <50000000>;     // 50 MHz
+					reg = <0>;
+				};
+				device@1 {
+					compatible = "spidev";
+					spi-max-frequency = <5000000>;      // 5 MHz
+					reg = <1>;
+				};
+				device@2 {
+					compatible = "spidev";
+					spi-max-frequency = <5000000>;      // 5 MHz
+					reg = <2>;
+				};
+				device@3 {
+					compatible = "spidev";
+					spi-max-frequency = <5000000>;      // 5 MHz
+					reg = <3>;
+				};
+			};
+
+			/* I2C */
+
+			i2c0: i2c@f0014000 {
+				status = "disabled";
+			};
+
+			i2c1: i2c@f0018000 {
+				status = "disabled";
+			};
+
+			/* Bit banging I2C wired on the Atmel MAC chip */
+			i2c3@ {
+				compatible = "i2c-gpio";
+				gpios = <&pioE 1 0 /* SDA */
+						 &pioE 2 0 /* SCK */
+						>;
+
+				/*i2c-gpio,sda-open-drain;*/
+				/*i2c-gpio,scl-open-drain;*/
+				i2c-gpio,delay-us = <4>;	/* ~178 kHz */
+				#address-cells = <1>;
+				#size-cells = <0>;
+			};
+
+			/* Ethernet */
+
+			macb0: ethernet@f0028000 {
+				phy-mode = "rgmii";
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				ethernet-phy@1 {
+					reg = <0x1>;
+					interrupt-parent = <&pioB>;
+					interrupts = <25 IRQ_TYPE_EDGE_FALLING>;
+					txen-skew-ps = <800>;
+					txc-skew-ps = <3000>;
+					rxdv-skew-ps = <400>;
+					rxc-skew-ps = <3000>;
+					rxd0-skew-ps = <400>;
+					rxd1-skew-ps = <400>;
+					rxd2-skew-ps = <400>;
+					rxd3-skew-ps = <400>;
+				};
+
+				ethernet-phy@7 {
+					reg = <0x7>;
+					interrupt-parent = <&pioB>;
+					interrupts = <25 IRQ_TYPE_EDGE_FALLING>;
+					txen-skew-ps = <800>;
+					txc-skew-ps = <3000>;
+					rxdv-skew-ps = <400>;
+					rxc-skew-ps = <3000>;
+					rxd0-skew-ps = <400>;
+					rxd1-skew-ps = <400>;
+					rxd2-skew-ps = <400>;
+					rxd3-skew-ps = <400>;
+				};
+			};
+
+			macb1: ethernet@f802c000 {
+				status = "okay";
+				phy-mode = "rmii";
+
+				#address-cells = <1>;
+				#size-cells = <0>;
+				phy0: ethernet-phy@1 {
+					interrupt-parent = <&pioE>;
+					interrupts = <30 IRQ_TYPE_EDGE_FALLING>;
+					reg = <1>;
+				};
+			};
+
+
+			/* Debug port */
+			/* Do not use DMA for dbgu */
+
+			dbgu: serial@ffffee00 {
+				dmas = <0>, <0>;	
+				status = "okay";
+			};
+
+			/* Serial */
+
+			usart1: serial@f0020000 {
+				dmas = <0>, <0>;	/*  Do not use DMA for usart1 */
+				pinctrl-names = "default";
+				/* pinctrl-0 = <&pinctrl_usart1 &pinctrl_usart1_rts_cts>; */
+				status = "disabled";
+			};
+
+
+			/* Watchdog */
+
+			watchdog@fffffe40 {
+				status = "okay";
+			};
+
+			pinctrl@fffff200 {
+				board {
+					pinctrl_mmc0_cd: mmc0_cd {
+						atmel,pins =
+							<AT91_PIOD 17 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>; /* PD17 GPIO with pullup deglitch */
+					};
+
+					pinctrl_mmc1_cd: mmc1_cd {
+						atmel,pins =
+							<AT91_PIOD 18 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>; /* PD18 GPIO with pullup deglitch */
+					};
+
+					pinctrl_pck0_as_audio_mck: pck0_as_audio_mck {
+						atmel,pins =
+							<AT91_PIOD 30 AT91_PERIPH_B AT91_PINCTRL_NONE>;	/* PD30 periph B */
+					};
+
+					pinctrl_pck1_as_isi_mck: pck1_as_isi_mck-0 {
+						atmel,pins =
+							<AT91_PIOD 31 AT91_PERIPH_B AT91_PINCTRL_NONE>;	/* PD31 periph B ISI_MCK */
+					};
+
+					pinctrl_sensor_reset: sensor_reset-0 {
+						atmel,pins =
+							<AT91_PIOE 24 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;   /* PE24 gpio */
+					};
+
+					pinctrl_sensor_power: sensor_power-0 {
+						atmel,pins =
+							<AT91_PIOE 29 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>; /* PE29 gpio */
+					};
+
+					pinctrl_usba_vbus: usba_vbus {
+						atmel,pins =
+							<AT91_PIOD 29 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>; /* PD29 GPIO with deglitch */
+					};
+					
+					/* PWM-TCB lines */
+
+					pinctrl_tcb1_tioa0: tcb1_tioa0 {
+						atmel,pins =
+							< AT91_PIOD 5 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					pinctrl_tcb1_tioa1: tcb1_tioa1 {
+						atmel,pins =
+							< AT91_PIOC 12 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					pinctrl_tcb1_tioa2: tcb1_tioa2 {
+						atmel,pins =
+							< AT91_PIOE 27 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					pinctrl_tcb1_tiob0: tcb1_tiob0 {
+						atmel,pins =
+							< AT91_PIOD 6 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					pinctrl_tcb1_tiob1: tcb1_tiob1 {
+						atmel,pins =
+							< AT91_PIOC 13 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					pinctrl_tcb1_tiob2: tcb1_tiob2 {
+						atmel,pins =
+							< AT91_PIOE 28 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					/* PWM lines */
+
+					pinctrl_pwm0_pwmh0: pwm0_pwmh0 {
+						atmel,pins =
+							< AT91_PIOB 0 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					pinctrl_pwm0_pwml0: pwm0_pwml0 {
+						atmel,pins =
+							< AT91_PIOB 1 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+ 
+ 					pinctrl_pwm0_pwmh1: pwm0_pwmh1 {
+						atmel,pins =
+							< AT91_PIOB 4 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					pinctrl_pwm0_pwml1: pwm0_pwml1 {
+						atmel,pins =
+							< AT91_PIOB 5 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					pinctrl_pwm0_pwmh2: pwm0_pwmh2 {
+						atmel,pins =
+							< AT91_PIOB 8 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					pinctrl_pwm0_pwml2: pwm0_pwml2 {
+						atmel,pins =
+							< AT91_PIOB 9 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					pinctrl_pwm0_pwmh3: pwm0_pwmh3 {
+						atmel,pins =
+							< AT91_PIOB 12 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+
+					pinctrl_pwm0_pwml3: pwm0_pwml3 {
+						atmel,pins =
+							< AT91_PIOB 13 AT91_PERIPH_B AT91_PINCTRL_NONE >;
+					};
+				};
+			};
+			
+			
+		};
+
+		usb0: gadget@00500000 {
+			atmel,vbus-gpio = <&pioD 29 GPIO_ACTIVE_HIGH>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&pinctrl_usba_vbus>;
+			status = "disabled";
+		};
+
+		usb1: ohci@00600000 {
+			num-ports = <3>;
+			atmel,vbus-gpio = <&pioD 25 GPIO_ACTIVE_HIGH
+					   &pioD 26 GPIO_ACTIVE_LOW
+					   &pioD 27 GPIO_ACTIVE_LOW
+					  >;
+			status = "disabled";
+		};
+
+		usb2: ehci@00700000 {
+			status = "okay";
+		};
+
+		pwm1: pwm@f8014000 {
+			compatible = "atmel,tcb-pwm";
+			#pwm-cells = <3>;
+			tc-block = <1>;
+			reg = <0xf8014000 0x100>;
+			interrupts = <27 IRQ_TYPE_LEVEL_HIGH 0>;
+			clocks = <&tcb1_clk>, <&clk32k>;
+			clock-names = "t0_clk", "slow_clk";
+			pinctrl-names = "default";
+			pinctrl-0 = <&pinctrl_tcb1_tioa0
+						 &pinctrl_tcb1_tioa1
+						 &pinctrl_tcb1_tioa2
+						 &pinctrl_tcb1_tiob0
+						 &pinctrl_tcb1_tiob1
+						 &pinctrl_tcb1_tiob2>;
+			status = "disabled";
+		};
+			
+		tcb1_clk: tcb1_clk {
+			#clock-cells = <0>;
+			//reg = <27>;
+			atmel,clk-output-range = <0 133000000>;
+			status = "okay";
+		};
+
+
+		nand0: nand@60000000 {
+			nand-bus-width = <8>;
+			nand-ecc-mode = "hw";
+			atmel,has-pmecc;
+			atmel,pmecc-cap = <4>;
+			atmel,pmecc-sector-size = <512>;
+			nand-on-flash-bbt;
+			status = "okay";
+
+			at91bootstrap@0 {
+				label = "at91bootstrap";
+				reg = <0x0 0x40000>;
+			};
+
+			bootloader@40000 {
+				label = "bootloader";
+				reg = <0x40000 0x80000>;
+			};
+
+			bootloaderenv@c0000 {
+				label = "bootloader env";
+				reg = <0xc0000 0xc0000>;
+			};
+
+			dtb@180000 {
+				label = "device tree";
+				reg = <0x180000 0x80000>;
+			};
+
+			kernel@200000 {
+				label = "kernel";
+				reg = <0x200000 0x600000>;
+			};
+
+			rootfs@800000 {
+				label = "rootfs";
+				reg = <0x800000 0x0f800000>;
+			};
+		};
+
+
+	};
+
+
+
+
+	leds {
+		compatible = "gpio-leds";
+
+		led0 {
+			label = "led0";
+			gpios = <&pioE 3 GPIO_ACTIVE_HIGH>;
+			linux,default-trigger = "heartbeat";
+		};
+
+		led1 {
+			label = "led1";
+			gpios = <&pioE 4 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "heartbeat";
+		};
+
+		led2 {
+			label = "led2";
+			gpios = <&pioE 5 GPIO_ACTIVE_HIGH>;
+			linux,default-trigger = "heartbeat";
+		};
+
+		led3 {
+			label = "led3";
+			gpios = <&pioE 6 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "heartbeat";
+		};
+
+	};
+
+    panel: panel {
+        /* compatible = "acme,43inch", "simple-panel"; */
+        /* compatible = "acme,50inch", "simple-panel"; */
+        /* compatible = "acme,70inch", "simple-panel"; */
+        
+        status = "disabled";
+
+        port@0 {
+            panel_input: endpoint@0 {
+                remote-endpoint = <&hlcdc_panel_output>;
+            };
+        };
+    };
+};
