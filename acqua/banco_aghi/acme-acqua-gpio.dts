@@ -214,6 +214,15 @@
 				status = "okay";
 			};
 
+			adc0: adc@f8018000 {
+				pinctrl-names = "default";
+				pinctrl-0 = <
+					&pinctrl_adc0_ad10
+					&pinctrl_adc0_ad11
+					>;
+				status = "okay";
+			};
+
 			pinctrl@fffff200 {
 				board {
 					pinctrl_mmc0_cd: mmc0_cd {
@@ -330,25 +339,30 @@
 			
 		};
 
-		usb0: gadget@00500000 {
+		/*usb0: gadget@00500000 {
+			
 			atmel,vbus-gpio = <&pioD 29 GPIO_ACTIVE_HIGH>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_usba_vbus>;
-			status = "disabled";
-		};
+			
+			status = "okay";
+		};*/
 
 		usb1: ohci@00600000 {
-			num-ports = <3>;
+			
+			/*num-ports = <3>;
 			atmel,vbus-gpio = <&pioD 25 GPIO_ACTIVE_HIGH
 					   &pioD 26 GPIO_ACTIVE_LOW
 					   &pioD 27 GPIO_ACTIVE_LOW
-					  >;
-			status = "disabled";
+					  >;*/
+			
+			status = "okay";
 		};
 
 		usb2: ehci@00700000 {
 			status = "okay";
 		};
+
 
 		pwm1: pwm@f8014000 {
 			compatible = "atmel,tcb-pwm";
@@ -372,7 +386,7 @@
 			#clock-cells = <0>;
 			//reg = <27>;
 			atmel,clk-output-range = <0 133000000>;
-			status = "okay";
+			status = "disabled";
 		};
 
 
